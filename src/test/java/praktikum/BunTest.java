@@ -17,7 +17,7 @@ public class BunTest {
         this.price = price;
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "{index}: name of bun:{0}, price of bun:{1}")
     public static Object[][] getBunData() {
         return new Object[][]{
                 {"Common bun", 100f},

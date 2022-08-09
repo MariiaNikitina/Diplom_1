@@ -21,7 +21,7 @@ public class IngredientTest {
         this.price = price;
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "{index}: TYPE of ingredient: {0}, name of ingredient: {1}, price of bun: {2}")
     public static Object[][] getIngredientData() {
         return new Object[][]{
                 {SAUCE, "Common sauce", 100f},

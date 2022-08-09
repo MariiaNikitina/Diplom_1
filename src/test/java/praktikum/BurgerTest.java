@@ -2,7 +2,10 @@ package praktikum;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.startsWith;
@@ -10,6 +13,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 
+@RunWith(MockitoJUnitRunner.class)
 public class BurgerTest {
     private Burger burger;
 
@@ -19,9 +23,11 @@ public class BurgerTest {
     }
 
     @Mock
-    Bun bun = new Bun("black bun", 100);
-    Ingredient ingredient = new Ingredient(IngredientType.SAUCE, "hot sauce", 100);
-    Ingredient ingredient2 = new Ingredient(IngredientType.FILLING, "dinosaur", 200);
+    Bun bun;
+    @Mock
+    Ingredient ingredient;
+    @Mock
+    Ingredient ingredient2;
 
     @Test
     public void setBunsSetsCorrectValue() {
@@ -61,10 +67,11 @@ public class BurgerTest {
 
     @Test
     public void moveIngredientTwoIngredients() {
+        Mockito.when(ingredient.getName()).thenReturn("Black bun");
         burger.ingredients.add(ingredient);
         burger.ingredients.add(ingredient2);
         burger.moveIngredient(0, 1);
-        assertEquals("Cannot find the moved ingredient at the correct place", burger.ingredients.get(1), ingredient);
+        assertEquals("Cannot find the moved ingredient at the correct place", burger.ingredients.get(1).getName(), ingredient.getName());
     }
 
     @Test
@@ -79,6 +86,9 @@ public class BurgerTest {
 
     @Test
     public void getPriceCheck() {
+        Mockito.when(bun.getPrice()).thenReturn(100f);
+        Mockito.when(ingredient.getPrice()).thenReturn(200f);
+        Mockito.when(ingredient2.getPrice()).thenReturn(100f);
         burger.bun = bun;
         burger.ingredients.add(ingredient);
         burger.ingredients.add(ingredient2);
@@ -89,13 +99,19 @@ public class BurgerTest {
 
     @Test
     public void getReceiptTheBunAtTheTop() {
+        Mockito.when(bun.getName()).thenReturn("Black bun");
         burger.bun = bun;
-        assertThat("The burger in receipt doesn't have a bun at the top", burger.getReceipt(), startsWith(String.format("(==== %s ====)%n",
-                burger.bun.name)));
+        assertThat("The burger in receipt doesn't have a bun at the top", burger.getReceipt(), startsWith(String.format("(==== %s ====)%n", burger.bun.getName())));
     }
 
     @Test
     public void getReceiptTheCorrectPriceAtTheBottom() {
+        Mockito.when(bun.getPrice()).thenReturn(100f);
+        Mockito.when(ingredient.getPrice()).thenReturn(200f);
+        Mockito.when(ingredient2.getPrice()).thenReturn(100f);
+        Mockito.when(bun.getName()).thenReturn("Black bun");
+        Mockito.when(ingredient.getType()).thenReturn(IngredientType.SAUCE);
+        Mockito.when(ingredient2.getType()).thenReturn(IngredientType.FILLING);
         burger.bun = bun;
         burger.ingredients.add(ingredient);
         burger.ingredients.add(ingredient2);
